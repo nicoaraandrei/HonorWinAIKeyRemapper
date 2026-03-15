@@ -96,6 +96,46 @@ Default behavior now includes:
 - `Component`: both unlocked and lockscreen use Wallet component intent.
 - `Hybrid`: unlocked uses GLOBALACTIONS, lockscreen uses QUICKDRAW.
 
+## Direct ADB Commands (Without Script)
+
+Use these from PowerShell if you want to write mappings directly.
+
+```powershell
+# Optional: select a target device when multiple are connected
+# $env:ANDROID_SERIAL = "<device-serial>"
+```
+
+### 1) Short Press -> Custom Package/Component
+
+Replace `com.example.app` and `.MainActivity` with your target app.
+
+```powershell
+adb --% shell settings put global ai_key_short_service_info '{"commonIntent":"intent:#Intent;package\u003dcom.example.app;component\u003dcom.example.app/.MainActivity\u003bend","isSubService":false,"isSupportScreenLockStart":"1","launchAnim":"0","lockScreenIntent":"intent:#Intent;package\u003dcom.example.app;component\u003dcom.example.app/.MainActivity\u003bend","packageName":"com.example.app","serviceId":"ai_shorthand","startType":0}'
+```
+
+### 2) Double Press -> Custom Package/Component
+
+Replace `com.example.wallet` and `.MainActivity` with your target app.
+
+```powershell
+adb --% shell settings put global ai_key_double_click_service_info '{"commonIntent":"intent:#Intent;package\u003dcom.example.wallet;component\u003dcom.example.wallet/.MainActivity\u003bend","isSubService":false,"isSupportScreenLockStart":"1","launchAnim":"1","lockScreenIntent":"intent:#Intent;package\u003dcom.example.wallet;component\u003dcom.example.wallet/.MainActivity\u003bend","packageName":"com.example.wallet","serviceId":"google_wallet","startType":0}'
+```
+
+### 3) Double Press Wallet Hybrid Example
+
+This matches script `Hybrid` behavior: unlocked `GlobalActions`, lockscreen `Quickdraw`.
+
+```powershell
+adb --% shell settings put global ai_key_double_click_service_info '{"commonIntent":"intent:#Intent;action\u003dcom.google.android.apps.wallet.globalactions.START;package\u003dcom.google.android.apps.walletnfcrel\u003bend","isSubService":false,"isSupportScreenLockStart":"1","launchAnim":"1","lockScreenIntent":"intent:#Intent;action\u003dcom.google.android.apps.wallet.main.QUICKDRAW;package\u003dcom.google.android.apps.walletnfcrel\u003bend","packageName":"com.google.android.apps.walletnfcrel","serviceId":"google_wallet","startType":0}'
+```
+
+### 4) Verify Current Values
+
+```powershell
+adb shell settings get global ai_key_short_service_info
+adb shell settings get global ai_key_double_click_service_info
+```
+
 ## Output Files
 
 Each run creates:
