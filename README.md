@@ -105,6 +105,30 @@ Use these from PowerShell if you want to write mappings directly.
 # $env:ANDROID_SERIAL = "<device-serial>"
 ```
 
+### 0) Raw ADB Commands Equivalent to Running Script With No Parameters (In case you don't want to run the script):
+
+When you run `./honor_ai_key_map.ps1` with defaults:
+
+- `ShortPressMode=Package`
+- `ShortPressPackage=com.parallelc.vistrigger`
+- `DoublePressMode=Hybrid`
+
+Use these raw writes to match that default behavior:
+
+```powershell
+# Default short press (VisTrigger package/component)
+adb --% shell settings put global ai_key_short_service_info '{"commonIntent":"intent:#Intent;package\u003dcom.parallelc.vistrigger;component\u003dcom.parallelc.vistrigger/com.parallelc.micts.ui.activity.MainActivity\u003bend","isSubService":false,"isSupportScreenLockStart":"1","launchAnim":"0","lockScreenIntent":"intent:#Intent;package\u003dcom.parallelc.vistrigger;component\u003dcom.parallelc.vistrigger/com.parallelc.micts.ui.activity.MainActivity\u003bend","packageName":"com.parallelc.vistrigger","serviceId":"ai_shorthand","startType":0}'
+
+# Default double press (Hybrid: unlocked GlobalActions, lockscreen Quickdraw)
+adb --% shell settings put global ai_key_double_click_service_info '{"commonIntent":"intent:#Intent;action\u003dcom.google.android.apps.wallet.globalactions.START;package\u003dcom.google.android.apps.walletnfcrel\u003bend","isSubService":false,"isSupportScreenLockStart":"1","launchAnim":"1","lockScreenIntent":"intent:#Intent;action\u003dcom.google.android.apps.wallet.main.QUICKDRAW;package\u003dcom.google.android.apps.walletnfcrel\u003bend","packageName":"com.google.android.apps.walletnfcrel","serviceId":"google_wallet","startType":0}'
+```
+
+If your VisTrigger launcher activity differs, resolve it first:
+
+```powershell
+adb shell cmd package resolve-activity --brief com.parallelc.vistrigger
+```
+
 ### 1) Short Press -> Custom Package/Component
 
 Replace `com.example.app` and `.MainActivity` with your target app.
