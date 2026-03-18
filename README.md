@@ -105,6 +105,11 @@ Use these from PowerShell if you want to write mappings directly.
 # $env:ANDROID_SERIAL = "<device-serial>"
 ```
 
+## Tips:
+
+You can also use in a separate powershell window the following command to check if the command has worked or if the provided json has errors and couldn't be parsed:
+adb logcat | Select-String -Pattern "ai_key|Aikey"
+
 ### 0) Raw ADB Commands Equivalent to Running Script With No Parameters (In case you don't want to run the script):
 
 When you run `./honor_ai_key_map.ps1` with defaults:
